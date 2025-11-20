@@ -37,6 +37,26 @@ synthesis:
       # and select the dashboard.
       otel.library.name:
         entityTagName: instrumentation.name
+  - identifier: host.id
+    name: host.name
+    legacyFeatures:
+      overrideGuidType: true
+    encodeIdentifierInGUID: true
+    conditions:
+      - attribute: eventType
+        value: Metric
+      - attribute: metricName
+        prefix: process.
+      - attribute: newrelic.source
+        value: 'api.metrics.otlp'
+      # if container.id is present, it's a container
+      - attribute: container.id
+        present: true
+      # if newrelic.entity.type is present, it's not a service
+      - attribute: service.name
+        present: true
+      - attribute: newrelic.entity.type
+        present: true
   - identifier: container.id
     name: container.name
     encodeIdentifierInGUID: true
